@@ -19,3 +19,28 @@ Then /^the output should include a copyright notice$/ do
   step %(the output should match /Copyright \\(c\\) [\\d]{4} [[\\w]+]+/)
 end
 
+#
+# Steps that interact with git
+#
+
+Given /^a git repo in directory "([^"]*)"$/ do |project_name|
+  @pwd = File.join(current_dir, project_name)
+  @repo = Rugged::Repository.init_at(@pwd, false)
+end
+
+#
+# Steps that interact with Dir.pwd
+#
+
+When /^I run `([^`]*)` in a git working dir$/ do |cmd|
+  working_dir = "foo/bar/qux_blegga"
+  step %(a git repo in directory "#{working_dir}")
+  step %(I run `#{cmd}` in "#{working_dir}" directory)
+end
+
+When /^I run `([^`]*)` in "([^"]*)" directory$/ do |cmd, working_dir|
+  step %(a directory named "#{working_dir}")
+  cd working_dir
+  step %(I run `#{cmd}`)
+  @dirs = ['tmp', 'aruba'] # reset Aruba::API.current_dir
+end

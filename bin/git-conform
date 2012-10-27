@@ -16,6 +16,18 @@ options = Trollop::options do
 
 end
 
+app = begin
+  Git::Conform::App.new(Dir.pwd)
+rescue RuntimeError
+  raise unless $!.message == "The given path is not a valid Git repository\n(error code -7)"
+  nil
+end
+
+unless app
+  STDERR.puts "Error: \"#{Dir.pwd}\" is not a git working directory... exiting!"
+  exit -1
+end
+
 fail "Coming soon!"
 
 # That's all, Folks!

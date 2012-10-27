@@ -19,7 +19,11 @@ end
 app = begin
   Git::Conform::App.new(Dir.pwd)
 rescue RuntimeError
-  raise unless $!.message == "The given path is not a valid Git repository\n(error code -7)"
+  unless $!.message =~ /The given path is not a valid Git repository/
+    unless $!.message =~ /Not a git repository \(or any of the parent directories\)/
+      raise # Rugged uses generic RuntimeErrors, so we have to check the exception messages...
+    end
+  end
   nil
 end
 

@@ -20,7 +20,7 @@ Then /^the output should include a copyright notice$/ do
 end
 
 #
-# Steps that interact with git
+# Steps that interact with `git` (via `rugged`)
 #
 
 Given /^a git repo in directory "([^"]*)"$/ do |project_name|
@@ -29,13 +29,26 @@ Given /^a git repo in directory "([^"]*)"$/ do |project_name|
 end
 
 #
-# Steps that interact with Dir.pwd
+# Steps that interact with `Dir.pwd`
 #
+
+When /^I run `([^`]*)` in a non-git working dir$/ do |cmd|
+  working_dir = "foo/bar/qux_blegga"
+  @dirs = [Dir.tmpdir] # sets Aruba::API.current_dir
+  step %(I run `#{cmd}` in "#{working_dir}" directory)
+end
 
 When /^I run `([^`]*)` in a git working dir$/ do |cmd|
   working_dir = "foo/bar/qux_blegga"
   step %(a git repo in directory "#{working_dir}")
   step %(I run `#{cmd}` in "#{working_dir}" directory)
+end
+
+When /^I run `([^`]*)` in a sub\-directory of a git working dir$/ do |cmd|
+  working_dir = "foo/bar/qux_blegga"
+  step %(a git repo in directory "#{working_dir}")
+  sub_dir = File.join(working_dir, "subdir")
+  step %(I run `#{cmd}` in "#{sub_dir}" directory)
 end
 
 When /^I run `([^`]*)` in "([^"]*)" directory$/ do |cmd, working_dir|

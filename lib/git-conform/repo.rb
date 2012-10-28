@@ -1,17 +1,9 @@
 require 'rugged'
 
-class Git::Conform::Repo
-
-  def initialize working_dir
-    @repo = Rugged::Repository.new(Rugged::Repository.discover(working_dir))
-  end
-
-  def workdir
-    @repo.workdir
-  end
+class Git::Conform::Repo < Rugged::Repository
 
   def git_conform_enabled?
-    File.exists? File.join(@repo.workdir, ".gitconform")
+    File.exists? File.join(workdir, ".gitconform")
   end
 
 end

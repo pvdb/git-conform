@@ -14,7 +14,8 @@ options = Trollop::options do
   version Git::Conform::COPYRIGHT
   banner Git::Conform::BANNER
 
-  opt :list, 'List all conformity checkers', :short => 'l', :default => false
+  opt :list, 'List all conformity checkers for this repo', :short => 'l', :default => false
+  opt :verify, 'Verify that all conformity checkers exist', :short => 'c', :default => false
 
 end
 
@@ -42,6 +43,14 @@ end
 if options[:list]
   STDOUT.puts repo.conformity_checkers.sort.join("\n")
   exit 0
+end
+
+if options[:verify]
+  begin
+    repo.verify
+  rescue NameError
+    STDERR.puts "fatal: #{$!.message}"
+  end
 end
 
 fail "Coming soon!"

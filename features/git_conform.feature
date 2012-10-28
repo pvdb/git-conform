@@ -34,3 +34,13 @@ Feature: Main Git::Conform Behaviour
           TrueChecker
 
           """
+
+  Scenario: a git repo with invalid Git::Conform configuration
+
+    Given a git config file named ".gitconform" with:
+          """
+          [git "conform"]
+              checkers = NoneExistingChecker
+          """
+     When I run `git-conform --verify` in the git repo
+      And the output should match /fatal: uninitialized constant Git::Conform::NoneExistingChecker/

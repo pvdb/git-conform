@@ -14,6 +14,8 @@ options = Trollop::options do
   version Git::Conform::COPYRIGHT
   banner Git::Conform::BANNER
 
+  opt :list, 'List all conformity checkers', :short => 'l', :default => false
+
 end
 
 repo = begin
@@ -35,6 +37,11 @@ end
 unless repo.git_conform_enabled?
   STDERR.puts "fatal: unable to read config file '#{repo.git_conform_path}': No such file or directory"
   exit -1
+end
+
+if options[:list]
+  STDOUT.puts repo.conformity_checkers.sort.join("\n")
+  exit 0
 end
 
 fail "Coming soon!"

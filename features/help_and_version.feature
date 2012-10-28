@@ -8,8 +8,9 @@ Feature: Help Me I've Got Versionitis
      And the banner should include the version
      And the banner should document that this app takes options
      And the following options should be documented:
-       | --version, -v:       |
-       | --help, -h:          |
+         | --list, -l:    |
+         | --version, -v: |
+         | --help, -h:    |
 
   Scenario: get the version of the main script
 

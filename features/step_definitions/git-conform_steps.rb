@@ -31,8 +31,12 @@ end
 #
 
 Given /^a git repo in directory "([^\042]*)"$/ do |repo_path|
-  repo_path = File.join(current_dir, repo_path)
-  @repo = Git::Conform::Repo.init_at(repo_path, false)
+  @repo_path = repo_path
+  @repo = Git::Conform::Repo.init_at(File.join(current_dir, repo_path), false)
+end
+
+When /^I run `([^\140]*)` in the git repo$/ do |cmd|
+  step %(I run `#{cmd}` in "#{@repo_path}" directory)
 end
 
 Given /^a git repo in directory "([^\042]*)" with files:$/ do |repo_path, files_table|

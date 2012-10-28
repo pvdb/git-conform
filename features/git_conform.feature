@@ -22,7 +22,15 @@ Feature: Main Git::Conform Behaviour
           [git "conform"]
               checkers = NoopChecker:TrueChecker:FalseChecker
           """
+     When I run `git-conform --list` in the git repo
      Then the following conformity checkers apply to the git repo:
           | NoopChecker  |
           | TrueChecker  |
           | FalseChecker |
+      And the output should contain exactly:
+          """
+          FalseChecker
+          NoopChecker
+          TrueChecker
+
+          """

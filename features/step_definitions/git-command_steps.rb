@@ -2,9 +2,9 @@
 # Methadone/Aruba "extensions"/"customizations"
 #
 
-When /^I get the version of "([^\042]*)"$/ do |cmd|
-  @cmd = cmd
-  step %(I run `#{cmd} --version`)
+When /^I get the version of "([^\042]*)"$/ do |app_name|
+  @app_name = app_name
+  step %(I run `#{app_name} --version`)
 end
 
 Then /^the output should include the version$/ do
@@ -12,7 +12,7 @@ Then /^the output should include the version$/ do
 end
 
 Then /^the output should include the app name$/ do
-  step %(the output should match /#{Regexp.escape(@cmd)}/)
+  step %(the output should match /#{Regexp.escape(@app_name)}/)
 end
 
 Then /^the output should include a copyright notice$/ do

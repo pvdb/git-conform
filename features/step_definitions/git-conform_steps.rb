@@ -2,6 +2,10 @@
 # Methadone/Aruba "extensions"/"customizations"
 #
 
+Then /^the output should be empty$/ do
+  step %(the output should contain exactly:), ""
+end
+
 When /^I get the version of "([^\042]*)"$/ do |app_name|
   @app_name = app_name
   step %(I run `#{app_name} --version`)
@@ -100,4 +104,12 @@ end
 
 Then /^the following conformity checkers apply to the git repo:$/ do |table|
   @repo.conformity_checkers.should =~ table.raw.flatten
+end
+
+Then /^the conformity checkers are valid$/ do
+  expect { @repo.verify }.to_not raise_error(NameError)
+end
+
+Then /^the conformity checkers are invalid$/ do
+  expect { @repo.verify }.to raise_error(NameError)
 end

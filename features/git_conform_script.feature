@@ -1,11 +1,13 @@
-Feature: Main Git::Conform Behaviour
+Feature: the git-conform script
 
   Scenario: a git repo with missing Git::Conform configuration
 
     Given a git config file named ".gitconform" with:
           """
           """
-     Then no conformity checkers apply to the git repo
+     When I run `git-conform --list` in the git repo
+     Then the exit status should be 0
+      And the output should be empty
 
   Scenario: a git repo with empty Git::Conform configuration
 
@@ -13,7 +15,9 @@ Feature: Main Git::Conform Behaviour
           """
           [git "conform"]
           """
-     Then no conformity checkers apply to the git repo
+     When I run `git-conform --list` in the git repo
+     Then the exit status should be 0
+      And the output should be empty
 
   Scenario: a git repo with valid Git::Conform configuration
 
@@ -24,10 +28,6 @@ Feature: Main Git::Conform Behaviour
           """
      When I run `git-conform --list` in the git repo
      Then the exit status should be 0
-     Then the following conformity checkers apply to the git repo:
-          | NoopChecker  |
-          | TrueChecker  |
-          | FalseChecker |
       And the output should contain exactly:
           """
           FalseChecker
@@ -43,7 +43,15 @@ Feature: Main Git::Conform Behaviour
     Given a git config file named ".gitconform" with:
           """
           [git "conform"]
-              checkers = NoneExistingChecker
+              checkers = NoopChecker:NoneExistingChecker
+          """
+     When I run `git-conform --list` in the git repo
+     Then the exit status should be 0
+      And the output should contain exactly:
+          """
+          NoneExistingChecker
+          NoopChecker
+
           """
      When I run `git-conform --verify` in the git repo
      Then the exit status should be 255

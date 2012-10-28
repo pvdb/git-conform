@@ -41,7 +41,9 @@ unless repo.git_conform_enabled?
 end
 
 if options[:list]
-  STDOUT.puts repo.conformity_checkers.sort.join("\n")
+  unless repo.conformity_checkers.empty?
+    STDOUT.puts repo.conformity_checkers.sort.join("\n")
+  end
   exit 0
 end
 

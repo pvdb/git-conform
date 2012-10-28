@@ -31,8 +31,8 @@ end
 #
 
 Given /^a git repo in directory "([^\042]*)"$/ do |repo_path|
-  pwd = File.join(current_dir, repo_path)
-  Rugged::Repository.init_at(pwd, false)
+  repo_path = File.join(current_dir, repo_path)
+  @repo = Git::Conform::Repo.init_at(repo_path, false)
 end
 
 Given /^a git repo in directory "([^\042]*)" with files:$/ do |repo_path, files_table|
@@ -75,4 +75,25 @@ When /^I run `([^\140]*)` in a sub\-directory of a git working dir with ".gitcon
   step %(a git repo in directory "#{AD_HOC_REPO_PATH}" with files:), Cucumber::Ast::Table.parse("| .gitconform |", nil, nil)
   sub_directory = File.join(AD_HOC_REPO_PATH, "sub_directory")
   step %(I run `#{cmd}` in "#{sub_directory}" directory)
+end
+
+#
+# Steps that configure Git::Conform before running a cmd
+#
+
+Given /^a git config file named "([^\042]*)" with:$/ do |file_name, file_content|
+  step %(a git repo in directory "#{AD_HOC_REPO_PATH}")
+  step %(a file named "#{File.join(@repo.workdir, file_name)}" with:), file_content
+end
+
+#
+# Steps that verify the Git::Conform expectations
+#
+
+Then /^no conformity checkers apply to the git repo$/ do
+  @repo.conformity_checkers.should be_empty
+end
+
+Then /^the following conformity checkers apply to the git repo:$/ do |table|
+  @repo.conformity_checkers.should =~ table.raw.flatten
 end

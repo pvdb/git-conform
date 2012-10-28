@@ -7,7 +7,7 @@ require 'git-conform/version'
 require 'git-conform/banner'
 require 'git-conform/copyright'
 
-require 'git-conform/app'
+require 'git-conform/repo'
 
 module Git
   module Conform

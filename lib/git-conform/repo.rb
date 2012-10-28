@@ -1,6 +1,6 @@
 require 'rugged'
 
-class Git::Conform::App
+class Git::Conform::Repo
 
   def initialize working_dir
     @repo = Rugged::Repository.new(Rugged::Repository.discover(working_dir))

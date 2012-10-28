@@ -16,8 +16,8 @@ options = Trollop::options do
 
 end
 
-app = begin
-  Git::Conform::App.new(Dir.pwd)
+repo = begin
+  Git::Conform::Repo.new(Dir.pwd)
 rescue RuntimeError
   unless $!.message =~ /The given path is not a valid Git repository/
     unless $!.message =~ /Not a git repository \(or any of the parent directories\)/
@@ -27,13 +27,13 @@ rescue RuntimeError
   nil
 end
 
-unless app
+unless repo
   STDERR.puts "Error: \"#{Dir.pwd}\" is not a git working directory... exiting!"
   exit -1
 end
 
-unless app.git_conform_enabled?
-  STDERR.puts "Error: cannot find \".gitconform\" in \"#{app.workdir}\"... exiting!"
+unless repo.git_conform_enabled?
+  STDERR.puts "Error: cannot find \".gitconform\" in \"#{repo.workdir}\"... exiting!"
   exit -1
 end
 

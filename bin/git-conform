@@ -32,6 +32,11 @@ unless app
   exit -1
 end
 
+unless app.git_conform_enabled?
+  STDERR.puts "Error: cannot find \".gitconform\" in \"#{app.workdir}\"... exiting!"
+  exit -1
+end
+
 fail "Coming soon!"
 
 # That's all, Folks!

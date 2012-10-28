@@ -4,13 +4,13 @@ Feature: Move Along, Nothing To See Here
 
     When I run `git-conform` in a non-git working dir
     Then the exit status should be 255
-     And the output should match /Error: "[^\042]*" is not a git working directory\.\.\. exiting!/
+     And the output should match /fatal: Not a git repository \(or any of the parent directories\): .*/
 
   Scenario: run the main script in a directory that is a git working dir not configured for "git conform"
 
     When I run `git-conform` in a git working dir without ".gitconform"
     Then the exit status should be 255
-     And the output should match /Error: cannot find ".gitconform" in "[^\042]*"\.\.\. exiting!/
+     And the output should match /fatal: unable to read config file .*: No such file or directory/
 
   Scenario: run the main script in a directory that is a git working dir configured for "git conform"
 

@@ -23,6 +23,7 @@ Feature: Main Git::Conform Behaviour
               checkers = NoopChecker:TrueChecker:FalseChecker
           """
      When I run `git-conform --list` in the git repo
+     Then the exit status should be 0
      Then the following conformity checkers apply to the git repo:
           | NoopChecker  |
           | TrueChecker  |
@@ -34,6 +35,8 @@ Feature: Main Git::Conform Behaviour
           TrueChecker
 
           """
+     When I run `git-conform --verify` in the git repo
+     Then the exit status should be 0
 
   Scenario: a git repo with invalid Git::Conform configuration
 
@@ -43,4 +46,5 @@ Feature: Main Git::Conform Behaviour
               checkers = NoneExistingChecker
           """
      When I run `git-conform --verify` in the git repo
+     Then the exit status should be 255
       And the output should match /fatal: uninitialized constant Git::Conform::NoneExistingChecker/

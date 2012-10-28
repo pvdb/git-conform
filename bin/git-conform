@@ -50,7 +50,9 @@ if options[:verify]
     repo.verify
   rescue NameError
     STDERR.puts "fatal: #{$!.message}"
+    exit -1
   end
+  exit 0
 end
 
 fail "Coming soon!"

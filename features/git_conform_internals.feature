@@ -3,14 +3,14 @@ Feature: the Git::Conform internals
   Scenario: list of files considered by Git::Conform
 
     Given a git repo with files:
-          | foo.rb |
-          | bar.rb |
-          | qux.rb |
+          | foo.rb     |
+          | lib/bar.rb |
+          | bin/qux.rb |
      Then git conform checks "3" files for conformity
       And conformity is checked for files:
           | foo.rb |
-          | bar.rb |
-          | qux.rb |
+          | lib/bar.rb |
+          | bin/qux.rb |
 
   Scenario: a git repo with missing Git::Conform configuration
 

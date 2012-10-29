@@ -26,7 +26,7 @@ Feature: the Git::Conform internals
           | NoopChecker  |
           | TrueChecker  |
           | FalseChecker |
-      And the conformity checkers are valid
+      And all conformity checkers are valid
 
   Scenario: a git repo with invalid Git::Conform configuration
 
@@ -38,4 +38,4 @@ Feature: the Git::Conform internals
      Then the following conformity checkers apply to the git repo:
           | NoopChecker         |
           | NoneExistingChecker |
-      And the conformity checkers are invalid
+      And at least one conformity checker is invalid

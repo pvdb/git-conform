@@ -106,10 +106,10 @@ Then /^the following conformity checkers apply to the git repo:$/ do |table|
   @repo.conformity_checkers.should =~ table.raw.flatten
 end
 
-Then /^the conformity checkers are valid$/ do
+Then /^all conformity checkers are valid$/ do
   expect { @repo.verify }.to_not raise_error(NameError)
 end
 
-Then /^the conformity checkers are invalid$/ do
+Then /^at least one conformity checker is invalid$/ do
   expect { @repo.verify }.to raise_error(NameError)
 end

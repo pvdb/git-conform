@@ -1,5 +1,17 @@
 Feature: the Git::Conform internals
 
+  Scenario: list of files considered by Git::Conform
+
+    Given a git repo with files:
+          | foo.rb |
+          | bar.rb |
+          | qux.rb |
+     Then git conform checks "3" files for conformity
+      And conformity is checked for files:
+          | foo.rb |
+          | bar.rb |
+          | qux.rb |
+
   Scenario: a git repo with missing Git::Conform configuration
 
     Given a git config file named ".gitconform" with:

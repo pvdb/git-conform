@@ -47,6 +47,7 @@ Given /^a git repo in directory "([^\042]*)" with files:$/ do |repo_path, files_
   step %(a git repo in directory "#{repo_path}")
   files_table.raw.each do |(file_path)|
     step %(an empty file named "#{File.join(repo_path, file_path)}")
+    step %(I run `git add #{file_path}` in "#{repo_path}" directory)
   end
 end
 
@@ -94,9 +95,22 @@ Given /^a git config file named "([^\042]*)" with:$/ do |file_name, file_content
   step %(a file named "#{File.join(@repo.workdir, file_name)}" with:), file_content
 end
 
+
+Given /^a git repo with files:$/ do |files_table|
+  step %(a git repo in directory "#{AD_HOC_REPO_PATH}" with files:), files_table
+end
+
 #
 # Steps that verify the Git::Conform expectations
 #
+
+Then /^git conform checks "(\d+)" files for conformity$/ do |file_count|
+  @repo.files.count.should be file_count.to_i
+end
+
+Then /^conformity is checked for files:$/ do |table|
+  @repo.files.should =~ table.raw.flatten
+end
 
 Then /^no conformity checkers apply to the git repo$/ do
   @repo.conformity_checkers.should be_empty

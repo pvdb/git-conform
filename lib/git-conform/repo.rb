@@ -23,6 +23,11 @@ class Git::Conform::Repo < Rugged::Repository
     end
   end
 
+  def files
+    # TODO make this work via Rugged
+    `cd #{self.workdir} && git ls-files`.chomp.split("\n")
+  end
+
   private
 
   # http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-constantize

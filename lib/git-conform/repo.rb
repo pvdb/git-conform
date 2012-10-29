@@ -24,7 +24,7 @@ class Git::Conform::Repo < Rugged::Repository
   end
 
   def files
-    # TODO make this work via Rugged
+    # TODO make this work via Rugged: self.lookup(self.head.target).tree
     `cd #{self.workdir} && git ls-files`.chomp.split("\n")
   end
 

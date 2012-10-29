@@ -45,10 +45,12 @@ end
 
 Given /^a git repo in directory "([^\042]*)" with files:$/ do |repo_path, files_table|
   step %(a git repo in directory "#{repo_path}")
+  # TODO make the below work via `rugged`
   files_table.raw.each do |(file_path)|
     step %(an empty file named "#{File.join(repo_path, file_path)}")
     step %(I run `git add #{file_path}` in "#{repo_path}" directory)
   end
+  step %(I run `git commit -m 'adding files'` in "#{repo_path}" directory)
 end
 
 #

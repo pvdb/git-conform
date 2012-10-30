@@ -156,7 +156,7 @@ end
 
 Then /^"([^\042]*)" "(passes|fails)" the "([^\042]*)" conformity$/ do |filename, passes_or_fails, checker_class|
   checker_class = constantize "Git::Conform::#{checker_class}"
-  checker_class.conforms?(filename).should case
+  checker_class.conforms?(File.join(current_dir, filename)).should case
     when passes_or_fails == "passes" then be_true
     when passes_or_fails == "fails" then be_false
   end

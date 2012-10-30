@@ -16,7 +16,8 @@ options = Trollop::options do
 
   opt :files, 'List all files in the git repo that will be processed', :short => 'f', :default => false
   opt :list, 'List all conformity checkers for this repo', :short => 'l', :default => false
-  opt :verify, 'Verify that all conformity checkers exist', :short => 'c', :default => false
+  opt :verify, 'Verify that all conformity checkers exist', :short => 'e', :default => false
+  opt :check, 'Run all conformity checkers', :short => 'c', :default => false
 
 end
 

@@ -2,6 +2,10 @@
 # Methadone/Aruba "extensions"/"customizations"
 #
 
+Given /^a non\-empty file named "([^\042]*)"$/ do |file_name|
+  step %(a 1 byte file named "#{file_name}")
+end
+
 Then /^the output should be empty$/ do
   step %(the output should contain exactly:), ""
 end
@@ -153,6 +157,20 @@ end
 #
 # Steps that verify the Git::Conform::Checker expectations
 #
+
+Then /^the "([^\042]*)" raises "([^\042]*)" for "([^\042]*)"$/ do |checker_class, exception_message, filename|
+  checker_class = constantize "Git::Conform::#{checker_class}"
+  expect {
+    checker_class.conforms? File.join(current_dir, filename)
+  }.to raise_error(RuntimeError, exception_message)
+end
+
+Then /^the "([^\042]*)" raises nothing for "([^\042]*)"$/ do |checker_class, filename|
+  checker_class = constantize "Git::Conform::#{checker_class}"
+  expect {
+    checker_class.conforms? File.join(current_dir, filename)
+  }.to_not raise_error(RuntimeError)
+end
 
 Then /^"([^\042]*)" "(passes|fails)" the "([^\042]*)" conformity$/ do |filename, passes_or_fails, checker_class|
   checker_class = constantize "Git::Conform::#{checker_class}"

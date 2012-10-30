@@ -2,6 +2,13 @@ require 'rugged'
 
 class Git::Conform::Repo < Rugged::Repository
 
+  def repo
+    # a bug/feature in Rugged prevents us from using instances of a subclass of Rugged::Repository
+    # in certain methods/places; instead it insists on an instance of Rugged::Repository itself...
+    # (meaning we can't use `self` on those occasions!) where is Barbara Liskov when you need her?
+    @repo ||= Rugged::Repository.new(self.path)
+  end
+
   def git_conform_path
     File.join(workdir, ".gitconform")
   end
@@ -24,8 +31,11 @@ class Git::Conform::Repo < Rugged::Repository
   end
 
   def files
-    # TODO make this work via Rugged: self.lookup(self.head.target).tree
-    `cd #{self.workdir} && git ls-files`.chomp.split("\n")
+    [].tap { |files|
+      repo.lookup(self.head.target).tree.walk_blobs { |root, entry|
+        files << (root.empty? ? entry[:name] : File.join(root, entry[:name]))
+      }
+    }
   end
 
   private

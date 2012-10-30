@@ -31,3 +31,11 @@ Feature: the Git::Conform checkers
 
     Given an empty file named "blegga.rb"
      Then "blegga.rb" "fails" the "FileNotEmptyChecker" conformity
+
+  Scenario: Git::Conform::LowercaseFilenameChecker
+
+    Given a non-empty file named "foo_bar_blegga.rb"
+     Then "foo_bar_blegga.rb" "passes" the "LowercaseFilenameChecker" conformity
+
+    Given an empty file named "FooBarBlegga.rb"
+     Then "FooBarBlegga.rb" "fails" the "LowercaseFilenameChecker" conformity

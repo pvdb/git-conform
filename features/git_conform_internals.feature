@@ -12,6 +12,17 @@ Feature: the Git::Conform internals
           | lib/bar.rb |
           | bin/qux.rb |
 
+  @wip
+  Scenario: Git::Conform doesn't consider binary files
+
+    Given a git repo with files:
+          | foo.rb  |
+          | bar.png |
+          | qux.tar |
+     Then git conform checks "1" file for conformity
+      And conformity is checked for files:
+          | foo.rb |
+
   Scenario: a git repo with missing Git::Conform configuration
 
     Given a git config file named ".gitconform" with:

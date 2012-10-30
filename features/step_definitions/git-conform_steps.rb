@@ -106,7 +106,7 @@ end
 # Steps that verify the Git::Conform expectations
 #
 
-Then /^git conform checks "(\d+)" files for conformity$/ do |file_count|
+Then /^git conform checks "(\d+)" files? for conformity$/ do |file_count|
   @repo.files.count.should be file_count.to_i
 end
 

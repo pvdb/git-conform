@@ -158,23 +158,23 @@ end
 # Steps that verify the Git::Conform::Checker expectations
 #
 
-Then /^the "([^\042]*)" raises "([^\042]*)" for "([^\042]*)"$/ do |checker_class, exception_message, filename|
+Then /^the "([^\042]*)" raises "([^\042]*)" for "([^\042]*)"$/ do |checker_class, exception_message, file_name|
   checker_class = constantize "Git::Conform::#{checker_class}"
   expect {
-    checker_class.conforms? File.join(current_dir, filename)
+    checker_class.conforms? File.join(current_dir, file_name)
   }.to raise_error(RuntimeError, exception_message)
 end
 
-Then /^the "([^\042]*)" raises nothing for "([^\042]*)"$/ do |checker_class, filename|
+Then /^the "([^\042]*)" raises nothing for "([^\042]*)"$/ do |checker_class, file_name|
   checker_class = constantize "Git::Conform::#{checker_class}"
   expect {
-    checker_class.conforms? File.join(current_dir, filename)
+    checker_class.conforms? File.join(current_dir, file_name)
   }.to_not raise_error(RuntimeError)
 end
 
-Then /^"([^\042]*)" "(passes|fails)" the "([^\042]*)" conformity$/ do |filename, passes_or_fails, checker_class|
+Then /^"([^\042]*)" "(passes|fails)" the "([^\042]*)" conformity$/ do |file_name, passes_or_fails, checker_class|
   checker_class = constantize "Git::Conform::#{checker_class}"
-  checker_class.conforms?(File.join(current_dir, filename)).should case
+  checker_class.conforms?(File.join(current_dir, file_name)).should case
     when passes_or_fails == "passes" then be_true
     when passes_or_fails == "fails" then be_false
   end

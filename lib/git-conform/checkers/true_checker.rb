@@ -1,9 +1,9 @@
 module Git
   module Conform
-    class TrueChecker < BaseChecker
+    class TrueChecker < FileChecker
 
       def self.conforms? filename
-        true
+        super && true
       end
 
     end

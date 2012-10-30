@@ -1,9 +1,9 @@
 module Git
   module Conform
-    class FileNotEmptyChecker < BaseChecker
+    class FileNotEmptyChecker < FileChecker
 
       def self.conforms? filename
-        !File.size?(filename).nil?
+        super && !File.size?(filename).nil?
       end
 
     end

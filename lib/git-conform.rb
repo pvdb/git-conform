@@ -7,6 +7,7 @@ require 'git-conform/version'
 require 'git-conform/banner'
 require 'git-conform/copyright'
 
+require 'git-conform/extensions'
 require 'git-conform/repo'
 
 # load all conformity checkers found in the 'lib/git-conform/checkers' directory

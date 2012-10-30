@@ -149,3 +149,15 @@ end
 Then /^at least one conformity checker is invalid$/ do
   expect { @repo.verify }.to raise_error(NameError)
 end
+
+#
+# Steps that verify the Git::Conform::Checker expectations
+#
+
+Then /^"([^\042]*)" "(passes|fails)" the "([^\042]*)" conformity$/ do |filename, passes_or_fails, checker_class|
+  checker_class = constantize "Git::Conform::#{checker_class}"
+  checker_class.conforms?(filename).should case
+    when passes_or_fails == "passes" then be_true
+    when passes_or_fails == "fails" then be_false
+  end
+end

@@ -1,9 +1,9 @@
 module Git
   module Conform
-    class FalseChecker < BaseChecker
+    class BaseChecker
 
       def self.conforms? filename
-        false
+        raise "SubclassResponsibility"
       end
 
     end

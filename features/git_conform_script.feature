@@ -56,3 +56,19 @@ Feature: the git-conform script
      When I run `git-conform --verify` in the git repo
      Then the exit status should be 255
       And the output should match /fatal: uninitialized constant Git::Conform::NoneExistingChecker/
+
+  Scenario: a git repo with a list of files
+
+    Given a git repo with files:
+          | foo.rb |
+          | bar.rb |
+          | qux.rb |
+     When I run `git-conform --files` in the git repo
+     Then the exit status should be 0
+     Then the output should contain exactly:
+          """
+          bar.rb
+          foo.rb
+          qux.rb
+
+          """

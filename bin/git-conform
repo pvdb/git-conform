@@ -14,6 +14,7 @@ options = Trollop::options do
   version Git::Conform::COPYRIGHT
   banner Git::Conform::BANNER
 
+  opt :files, 'List all files in the git repo that will be processed', :short => 'f', :default => false
   opt :list, 'List all conformity checkers for this repo', :short => 'l', :default => false
   opt :verify, 'Verify that all conformity checkers exist', :short => 'c', :default => false
 
@@ -33,6 +34,13 @@ end
 unless repo
   STDERR.puts "fatal: Not a git repository (or any of the parent directories): #{Dir.pwd}"
   exit -1
+end
+
+if options[:files]
+  unless (files = repo.files).empty?
+    STDOUT.puts files.sort.join("\n")
+  end
+  exit 0
 end
 
 unless repo.git_conform_enabled?

@@ -48,9 +48,11 @@ Given /^a git repo in directory "([^\042]*)" with files:$/ do |repo_path, files_
   # TODO make the below work via `rugged`
   files_table.raw.each do |(file_path)|
     step %(an empty file named "#{File.join(repo_path, file_path)}")
-    step %(I run `git add #{file_path}` in "#{repo_path}" directory)
+    # step %(I run `git add #{file_path}` in "#{repo_path}" directory)
+    `cd #{File.join(current_dir ,repo_path)} && git add #{file_path}`
   end
-  step %(I run `git commit -m 'adding files'` in "#{repo_path}" directory)
+  # step %(I run `git commit -m 'adding files'` in "#{repo_path}" directory)
+  `cd #{File.join(current_dir ,repo_path)} && git commit -m 'adding files'`
 end
 
 Given /^a git repo in directory "([^\042]*)" with file types:$/ do |repo_path, file_types_table|
@@ -61,9 +63,11 @@ Given /^a git repo in directory "([^\042]*)" with file types:$/ do |repo_path, f
     when 'text' then step %(an empty file named "#{File.join(repo_path, file_path)}")
     when 'binary' then step %(a file named "#{File.join(repo_path, file_path)}" with:), "\000"
     end
-    step %(I run `git add #{file_path}` in "#{repo_path}" directory)
+    # step %(I run `git add #{file_path}` in "#{repo_path}" directory)
+    `cd #{File.join(current_dir ,repo_path)} && git add #{file_path}`
   end
-  step %(I run `git commit -m 'adding files'` in "#{repo_path}" directory)
+  # step %(I run `git commit -m 'adding files'` in "#{repo_path}" directory)
+  `cd #{File.join(current_dir ,repo_path)} && git commit -m 'adding files'`
 end
 
 #

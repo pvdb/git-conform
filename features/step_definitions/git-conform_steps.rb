@@ -53,6 +53,19 @@ Given /^a git repo in directory "([^\042]*)" with files:$/ do |repo_path, files_
   step %(I run `git commit -m 'adding files'` in "#{repo_path}" directory)
 end
 
+Given /^a git repo in directory "([^\042]*)" with file types:$/ do |repo_path, file_types_table|
+  step %(a git repo in directory "#{repo_path}")
+  # TODO make the below work via `rugged`
+  file_types_table.raw.each do |(file_path, file_type)|
+    case file_type
+    when 'text' then step %(an empty file named "#{File.join(repo_path, file_path)}")
+    when 'binary' then step %(a file named "#{File.join(repo_path, file_path)}" with:), "\000"
+    end
+    step %(I run `git add #{file_path}` in "#{repo_path}" directory)
+  end
+  step %(I run `git commit -m 'adding files'` in "#{repo_path}" directory)
+end
+
 #
 # Steps that set up a git repo before running a cmd
 #
@@ -97,9 +110,12 @@ Given /^a git config file named "([^\042]*)" with:$/ do |file_name, file_content
   step %(a file named "#{File.join(@repo.workdir, file_name)}" with:), file_content
 end
 
-
 Given /^a git repo with files:$/ do |files_table|
   step %(a git repo in directory "#{AD_HOC_REPO_PATH}" with files:), files_table
+end
+
+Given /^a git repo with file types:$/ do |file_types_table|
+  step %(a git repo in directory "#{AD_HOC_REPO_PATH}" with file types:), file_types_table
 end
 
 #

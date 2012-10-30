@@ -30,10 +30,18 @@ class Git::Conform::Repo < Rugged::Repository
     end
   end
 
+  def binary? path
+    # TODO make this work via Rugged (see also: man 5 gitattributes for inspiration)
+    # http://stackoverflow.com/questions/6119956/how-to-determine-if-git-handles-a-file-as-binary-or-as-text
+    `pcregrep -l '\\x00' #{File.join(self.workdir, path)}`
+    $? == 0
+  end
+
   def files
     [].tap { |files|
       repo.lookup(self.head.target).tree.walk_blobs { |root, entry|
-        files << (root.empty? ? entry[:name] : File.join(root, entry[:name]))
+        path = (root.empty? ? entry[:name] : File.join(root, entry[:name]))
+        files << path unless binary? path
       }
     }
   end

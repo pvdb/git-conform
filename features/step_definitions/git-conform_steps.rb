@@ -6,6 +6,10 @@ Given /^a non\-empty file named "([^\042]*)"$/ do |file_name|
   step %(a 1 byte file named "#{file_name}")
 end
 
+Given /^a file named "([^\042]*)" with content "([^\042]*)"$/ do |file_name, content|
+  step %(a file named "#{file_name}" with:), content.gsub(/\\t/, "\t")
+end
+
 Then /^the output should be empty$/ do
   step %(the output should contain exactly:), ""
 end

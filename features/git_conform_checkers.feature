@@ -39,3 +39,11 @@ Feature: the Git::Conform checkers
 
     Given an empty file named "FooBarBlegga.rb"
      Then "FooBarBlegga.rb" "fails" the "LowercaseFilenameChecker" conformity
+
+  Scenario: Git::Conform::TabCharacterChecker
+
+    Given a file named "blegga.rb" with content "  Hello, world!"
+     Then "blegga.rb" "passes" the "TabCharacterChecker" conformity
+
+    Given a file named "blegga.rb" with content "\tHello, world!"
+     Then "blegga.rb" "fails" the "TabCharacterChecker" conformity

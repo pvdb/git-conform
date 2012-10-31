@@ -47,3 +47,14 @@ Feature: the Git::Conform checkers
 
     Given a file named "blegga.rb" with content "\tHello, world!"
      Then "blegga.rb" "fails" the "TabCharacterChecker" conformity
+
+  Scenario: Git::Conform::CarriageReturnCharacterChecker
+
+    Given a file named "blegga.rb" with content "Hello, world!\n"
+     Then "blegga.rb" "passes" the "CarriageReturnCharacterChecker" conformity
+
+    Given a file named "blegga.rb" with content "Hello, world!\r"
+     Then "blegga.rb" "fails" the "CarriageReturnCharacterChecker" conformity
+
+    Given a file named "blegga.rb" with content "Hello, world!\r\n"
+     Then "blegga.rb" "fails" the "CarriageReturnCharacterChecker" conformity

@@ -7,7 +7,13 @@ Given /^a non\-empty file named "([^\042]*)"$/ do |file_name|
 end
 
 Given /^a file named "([^\042]*)" with content "([^\042]*)"$/ do |file_name, content|
-  step %(a file named "#{file_name}" with:), content.gsub(/\\t/, "\t")
+  step %(a file named "#{file_name}" with:), content.gsub(/\\[nrt]/) { |match|
+    case match
+      when '\n' then "\n"
+      when '\r' then "\r"
+      when '\t' then "\t"
+    end
+  }
 end
 
 Then /^the output should be empty$/ do

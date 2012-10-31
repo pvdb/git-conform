@@ -75,3 +75,11 @@ Feature: the Git::Conform checkers
 
     Given a file named "blegga.rb" with content "Hello, world!  \n"
      Then "blegga.rb" "fails" the "TrailingWhitespaceChecker" conformity
+
+  Scenario: Git::Conform::NonAsciiCharacterChecker
+
+    Given a file named "blegga.rb" with content "Hello, World!"
+     Then "blegga.rb" "passes" the "NonAsciiCharacterChecker" conformity
+
+    Given a file named "blegga.rb" with content "Show me the £££!"
+     Then "blegga.rb" "fails" the "NonAsciiCharacterChecker" conformity

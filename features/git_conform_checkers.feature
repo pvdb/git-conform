@@ -58,3 +58,20 @@ Feature: the Git::Conform checkers
 
     Given a file named "blegga.rb" with content "Hello, world!\r\n"
      Then "blegga.rb" "fails" the "CarriageReturnCharacterChecker" conformity
+
+  Scenario: Git::Conform::TrailingWhitespaceChecker
+
+    Given a file named "blegga.rb" with content "\n"
+     Then "blegga.rb" "passes" the "TrailingWhitespaceChecker" conformity
+
+    Given a file named "blegga.rb" with content "Hello, world!\n"
+     Then "blegga.rb" "passes" the "TrailingWhitespaceChecker" conformity
+
+    Given a file named "blegga.rb" with content "Hello, world!\t\n"
+     Then "blegga.rb" "fails" the "TrailingWhitespaceChecker" conformity
+
+    Given a file named "blegga.rb" with content "Hello, world! \n"
+     Then "blegga.rb" "fails" the "TrailingWhitespaceChecker" conformity
+
+    Given a file named "blegga.rb" with content "Hello, world!  \n"
+     Then "blegga.rb" "fails" the "TrailingWhitespaceChecker" conformity

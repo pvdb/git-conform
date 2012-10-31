@@ -3,7 +3,7 @@ module Git
     class LowercaseFilenameChecker < FileChecker
 
       def self.conforms? filename
-        super && filename !~ /[A-Z]/
+        super && filename.match(/[A-Z]/).nil?
       end
 
     end

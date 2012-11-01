@@ -50,7 +50,12 @@ end
 
 Given /^a git repo in directory "([^\042]*)"$/ do |repo_path|
   @repo_path = repo_path
-  @repo = Git::Conform::Repo.init_at(File.join(current_dir, repo_path), false)
+  aruba_path = File.join(current_dir, repo_path)
+  @repo = if File.exists?(File.join(aruba_path, ".git"))
+    Git::Conform::Repo.new(aruba_path)
+  else
+    Git::Conform::Repo.init_at(aruba_path, false)
+  end
 end
 
 When /^I run `([^\140]*)` in the git repo$/ do |cmd|

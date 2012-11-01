@@ -24,6 +24,13 @@ class Git::Conform::Repo < Rugged::Repository
     end
   end
 
+  def binary_glob_patterns
+    @binary_glob_patterns ||= begin
+      # TODO make this work via Rugged (why doesn't `Rugged::Config.new()` work?!?)
+      `git config -f #{git_conform_path} git.conform.binary`.chomp.split(':')
+    end
+  end
+
   def verify
     conformity_checkers.each do |checker|
       constantize "Git::Conform::#{checker}"
@@ -41,11 +48,15 @@ class Git::Conform::Repo < Rugged::Repository
 
   private
 
+  # http://stackoverflow.com/questions/6119956/how-to-determine-if-git-handles-a-file-as-binary-or-as-text
+  # `pcregrep -l '\\x00' #{File.join(self.workdir, path)}` ; $? == 0
+
+  # TODO is this the most performant way? (see also: "man 5 gitattributes" for inspiration)
+
   def binary? entry
-    # http://stackoverflow.com/questions/6119956/how-to-determine-if-git-handles-a-file-as-binary-or-as-text
-    # `pcregrep -l '\\x00' #{File.join(self.workdir, path)}` ; $? == 0
-    # TODO is this the most performant way? (see also: man 5 gitattributes for inspiration)
-    @repo.lookup(entry[:oid]).read_raw.data =~ /\x00/
+    binary_glob_patterns.any? { |glob_pattern|
+      File.fnmatch?(glob_pattern, entry[:name])
+    } || @repo.lookup(entry[:oid]).read_raw.data =~ /\x00/
   end
 
 end

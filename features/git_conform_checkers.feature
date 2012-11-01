@@ -83,3 +83,11 @@ Feature: the Git::Conform checkers
 
     Given a file named "blegga.rb" with content "Show me the £££!"
      Then "blegga.rb" "fails" the "NonAsciiCharacterChecker" conformity
+
+  Scenario: Git::Conform::WhitespaceFilenameChecker
+
+    Given an empty file named "blegga.rb"
+     Then "blegga.rb" "passes" the "WhitespaceFilenameChecker" conformity
+
+    Given an empty file named "foo bar blegga.rb"
+     Then "foo bar blegga.rb" "fails" the "WhitespaceFilenameChecker" conformity

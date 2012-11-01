@@ -24,3 +24,14 @@ Feature: Move Along, Nothing To See Here
     Then the exit status should be 1
      And the output should match /Coming soon! \(RuntimeError\)/
 
+  Scenario: NEED TO IMPLEMENT --check OPTION
+
+    When I run `git-conform --check` in a git working dir with ".gitconform"
+    Then the exit status should be 0
+     And the output should be empty
+
+  Scenario: NEED TO IMPLEMENT --available OPTION
+
+    When I run `git-conform --available`
+    Then the exit status should be 0
+     And the output should be empty

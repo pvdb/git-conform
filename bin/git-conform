@@ -14,11 +14,16 @@ options = Trollop::options do
   version Git::Conform::COPYRIGHT
   banner Git::Conform::BANNER
 
-  opt :files,  'List all files in the git repo that will be processed', :short => 'f', :default => false
-  opt :list,   'List all conformity checkers for this repo',            :short => 'l', :default => false
-  opt :verify, 'Verify that all conformity checkers exist',             :short => 'e', :default => false
-  opt :check,  'Run all conformity checkers',                           :short => 'c', :default => false
+  opt :available, 'List all available conformity checkers',                :short => 'a', :default => false
+  opt :files,     'List all files in the git repo that will be processed', :short => 'f', :default => false
+  opt :list,      'List all conformity checkers for this repo',            :short => 'l', :default => false
+  opt :verify,    'Verify that all conformity checkers exist',             :short => 'e', :default => false
+  opt :check,     'Run all conformity checkers',                           :short => 'c', :default => false
 
+end
+
+if options[:available]
+  exit 0
 end
 
 repo = begin
@@ -63,6 +68,10 @@ if options[:verify]
     STDERR.puts "fatal: #{$!.message}"
     exit -1
   end
+  exit 0
+end
+
+if options[:check]
   exit 0
 end
 

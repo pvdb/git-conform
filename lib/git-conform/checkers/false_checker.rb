@@ -2,7 +2,7 @@ module Git
   module Conform
     class FalseChecker < FileChecker
 
-      def self.conforms? filename
+      def conforms?
         super && false
       end
 

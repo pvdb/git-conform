@@ -8,7 +8,7 @@ module Git
         @filename = filename
       end
 
-      def self.conforms? filename
+      def conforms?
         raise "SubclassResponsibility"
       end
 

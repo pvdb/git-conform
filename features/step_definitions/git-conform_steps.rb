@@ -176,20 +176,20 @@ end
 Then /^the "([^\042]*)" raises "([^\042]*)" for "([^\042]*)"$/ do |checker_class, exception_message, file_name|
   checker_class = constantize "Git::Conform::#{checker_class}"
   expect {
-    checker_class.conforms? File.join(current_dir, file_name)
+    checker_class.new(File.join(current_dir, file_name)).conforms?
   }.to raise_error(RuntimeError, exception_message)
 end
 
 Then /^the "([^\042]*)" raises nothing for "([^\042]*)"$/ do |checker_class, file_name|
   checker_class = constantize "Git::Conform::#{checker_class}"
   expect {
-    checker_class.conforms? File.join(current_dir, file_name)
+    checker_class.new(File.join(current_dir, file_name)).conforms?
   }.to_not raise_error(RuntimeError)
 end
 
 Then /^"([^\042]*)" "(passes|fails)" the "([^\042]*)" conformity$/ do |file_name, passes_or_fails, checker_class|
   checker_class = constantize "Git::Conform::#{checker_class}"
-  checker_class.conforms?(File.join(current_dir, file_name)).should case
+  checker_class.new(File.join(current_dir, file_name)).conforms?.should case
     when passes_or_fails == "passes" then be_true
     when passes_or_fails == "fails" then be_false
   end

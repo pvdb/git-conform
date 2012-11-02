@@ -16,4 +16,16 @@ describe Git::Conform::BaseChecker do
 
   end
 
+  describe "#conforms?" do
+
+    subject { described_class.new("blegga.rb") }
+
+    it "raises a RuntimeError" do
+      expect {
+        subject.conforms?
+      }.to raise_error(RuntimeError, "SubclassResponsibility")
+    end
+
+  end
+
 end

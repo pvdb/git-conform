@@ -149,8 +149,8 @@ Then /^git conform checks "(\d+)" files? for conformity$/ do |file_count|
   @repo.files.count.should be file_count.to_i
 end
 
-Then /^conformity is checked for files:$/ do |table|
-  @repo.files.should =~ table.raw.flatten
+Then /^the following are considered "(text|binary)" files:$/ do |text_or_binary, table|
+  @repo.files(:type => text_or_binary.to_sym).should =~ table.raw.flatten
 end
 
 Then /^no conformity checkers apply to the git repo$/ do

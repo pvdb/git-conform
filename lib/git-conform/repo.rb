@@ -37,13 +37,17 @@ class Git::Conform::Repo < Rugged::Repository
     end
   end
 
-  def files
-    [].tap { |files|
+  def files options = {}
+    type = options[:type] || :all
+    @files ||= {}
+    @files[type] ||= begin
+      files = []
       repo.lookup(self.head.target).tree.walk_blobs { |root, entry|
-        path = (root.empty? ? entry[:name] : File.join(root, entry[:name]))
-        files << path unless binary? entry
+        entry_path = (root.empty? ? entry[:name] : File.join(root, entry[:name]))
+        files << entry_path if binary?(entry) ? (type != :text) : (type != :binary)
       }
-    }
+      files
+    end
   end
 
   private
@@ -56,7 +60,7 @@ class Git::Conform::Repo < Rugged::Repository
   def binary? entry
     binary_glob_patterns.any? { |glob_pattern|
       File.fnmatch?(glob_pattern, entry[:name])
-    } || @repo.lookup(entry[:oid]).read_raw.data =~ /\x00/
+    } || !@repo.lookup(entry[:oid]).read_raw.data.match(/\x00/).nil?
   end
 
 end

@@ -59,16 +59,16 @@ Feature: the git-conform script
 
   Scenario: a git repo with a list of files
 
-    Given a git repo with files:
-          | foo.rb |
-          | bar.rb |
-          | qux.rb |
+    Given a git repo with file types:
+          | foo.rb  | text   |
+          | bar.png | binary |
+          | qux     | text   |
      When I run `git-conform --files` in the git repo
      Then the exit status should be 0
      Then the output should contain exactly:
           """
-          bar.rb
+          bar.png
           foo.rb
-          qux.rb
+          qux
 
           """

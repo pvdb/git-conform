@@ -28,4 +28,24 @@ describe Git::Conform::BaseChecker do
 
   end
 
+  describe "#check_conformity" do
+
+    subject { described_class.new("blegga.rb") }
+
+    it "yields with the filename if the file doesn't conform" do
+      subject.stub(:conforms?).and_return(false)
+      expect { |block|
+        subject.check_conformity &block
+      }.to yield_with_args("blegga.rb")
+    end
+
+    it "doesn't yield the block if the file conforms" do
+      subject.stub(:conforms?).and_return(true)
+      expect { |block|
+        subject.check_conformity &block
+      }.not_to yield_control
+    end
+
+  end
+
 end

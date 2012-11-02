@@ -12,6 +12,10 @@ module Git
         raise "SubclassResponsibility"
       end
 
+      def check_conformity &block
+        yield @filename unless conforms?
+      end
+
     end
   end
 end

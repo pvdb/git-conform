@@ -20,7 +20,7 @@ Feature: the Git::Conform internals
     Given a git config file named ".gitconform" with:
           """
           [git "conform"]
-              checkers = NoopChecker:TrueChecker:FalseChecker
+              checkers = Noop:True:False
           """
      Then the following conformity checkers apply to the git repo:
           | NoopChecker  |
@@ -33,7 +33,7 @@ Feature: the Git::Conform internals
     Given a git config file named ".gitconform" with:
           """
           [git "conform"]
-              checkers = NoneExistingChecker:NoopChecker
+              checkers = NoneExisting:Noop
           """
      Then the following conformity checkers apply to the git repo:
           | NoopChecker         |

@@ -24,7 +24,7 @@ Feature: the git-conform script
     Given a git config file named ".gitconform" with:
           """
           [git "conform"]
-              checkers = NoopChecker:TrueChecker:FalseChecker
+              checkers = Noop:True:False
           """
      When I run `git-conform --list` in the git repo
      Then the exit status should be 0
@@ -43,7 +43,7 @@ Feature: the git-conform script
     Given a git config file named ".gitconform" with:
           """
           [git "conform"]
-              checkers = NoopChecker:NoneExistingChecker
+              checkers = Noop:NoneExisting
           """
      When I run `git-conform --list` in the git repo
      Then the exit status should be 0

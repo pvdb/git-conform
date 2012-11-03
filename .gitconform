@@ -1,2 +1,2 @@
 [git "conform"]
-	checkers = CarriageReturnCharacterChecker:NonAsciiCharacterChecker:TabCharacterChecker:TrailingWhitespaceChecker
+	checkers = CarriageReturnCharacter:NonAsciiCharacter:TabCharacter:TrailingWhitespace

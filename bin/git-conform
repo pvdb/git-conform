@@ -72,6 +72,15 @@ if options[:verify]
 end
 
 if options[:check]
+  repo.conformity_checkers.each do |checker_class|
+    checker_class = constantize "Git::Conform::#{checker_class}"
+    puts checker_class.name.inverse
+    repo.files.each do |filename|
+      checker_class.new(filename).check_conformity do |filename|
+        puts ">>> " + filename
+      end
+    end
+  end
   exit 0
 end
 

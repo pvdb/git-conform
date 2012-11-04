@@ -65,10 +65,7 @@ Feature: the git-conform script
           | qux     | text   |
      When I run `git-conform --files` in the git repo
      Then the exit status should be 0
-     Then the output should contain exactly:
-          """
-          bar.png
-          foo.rb
-          qux
-
-          """
+      And the output should contain all of these:
+          | bar.png |
+          | foo.rb  |
+          | qux     |

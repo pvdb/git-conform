@@ -21,13 +21,13 @@ describe Git::Conform::FileChecker do
       subclass_name = "Git::Conform::SubclassOfFileChecker"
 
       # and
-      described_class.available_checkers.should_not include("SubclassOfFile")
+      described_class.available_checkers.should_not include("SubclassOfFileChecker")
 
       # when
       eval "class #{subclass_name} < #{superclass_name} ; end"
 
       # then
-      described_class.available_checkers.should include("SubclassOfFile")
+      described_class.available_checkers.should include("SubclassOfFileChecker")
     end
 
     it "should include child and grandchild subclasses" do
@@ -37,16 +37,16 @@ describe Git::Conform::FileChecker do
       grandchild_subclass_name = "Git::Conform::GrandchildSubclassOfFileChecker"
 
       # and
-      described_class.available_checkers.should_not include("ChildSubclassOfFile")
-      described_class.available_checkers.should_not include("GrandchildSubclassOfFile")
+      described_class.available_checkers.should_not include("ChildSubclassOfFileChecker")
+      described_class.available_checkers.should_not include("GrandchildSubclassOfFileChecker")
 
       # when
       eval "class #{child_subclass_name} < #{superclass_name} ; end"
       eval "class #{grandchild_subclass_name} < #{child_subclass_name} ; end"
 
       # then
-      described_class.available_checkers.should include("ChildSubclassOfFile")
-      described_class.available_checkers.should include("GrandchildSubclassOfFile")
+      described_class.available_checkers.should include("ChildSubclassOfFileChecker")
+      described_class.available_checkers.should include("GrandchildSubclassOfFileChecker")
     end
 
     it "should not include other classes in the hierarchy" do
@@ -55,13 +55,13 @@ describe Git::Conform::FileChecker do
       subclass_name = "Git::Conform::SubclassOfBaseChecker"
 
       # and
-      described_class.available_checkers.should_not include("SubclassOfBase")
+      described_class.available_checkers.should_not include("SubclassOfBaseChecker")
 
       # when
       eval "class #{subclass_name} < #{superclass_name} ; end"
 
       # then
-      described_class.available_checkers.should_not include("SubclassOfBase")
+      described_class.available_checkers.should_not include("SubclassOfBaseChecker")
     end
 
   end

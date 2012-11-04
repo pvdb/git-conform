@@ -16,3 +16,9 @@ Then /^the output should contain all of these:$/ do |table|
     assert_partial_output(string, all_output)
   end
 end
+
+Then /^the output should not contain any of these:$/ do |table|
+  table.raw.flatten.each do |string|
+    assert_no_partial_output(string, all_output)
+  end
+end

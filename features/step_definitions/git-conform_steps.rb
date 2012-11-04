@@ -17,7 +17,11 @@ Given /^a file named "([^\042]*)" with content "([^\042]*)"$/ do |file_name, con
 end
 
 Then /^the output should be empty$/ do
-  step %(the output should contain exactly:), ""
+  all_output.should be_empty
+end
+
+Then /^the output should not be empty$/ do
+  all_output.should_not be_empty
 end
 
 When /^I get the version of "([^\042]*)"$/ do |app_name|

@@ -21,7 +21,7 @@ module Git
 
       def self.available_checkers
         @@available_checkers.map(&:name).map { |class_name|
-          class_name.match(/Git::Conform::(.*)Checker/)[1]
+          class_name.match(/\AGit::Conform::(.*Checker)\Z/)[1]
         }
       end
 

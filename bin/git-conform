@@ -23,6 +23,7 @@ options = Trollop::options do
 end
 
 if options[:available]
+  STDOUT.puts Git::Conform::FileChecker.available_checkers
   exit 0
 end
 

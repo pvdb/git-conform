@@ -24,7 +24,7 @@ Feature: the git-conform script
     Given a git config file named ".gitconform" with:
           """
           [git "conform"]
-              checkers = Noop:True:False
+              checkers = NoopChecker:TrueChecker:FalseChecker
           """
      When I run `git-conform --list` in the git repo
      Then the exit status should be 0
@@ -43,7 +43,7 @@ Feature: the git-conform script
     Given a git config file named ".gitconform" with:
           """
           [git "conform"]
-              checkers = Noop:NoneExisting
+              checkers = NoopChecker:NoneExistingChecker
           """
      When I run `git-conform --list` in the git repo
      Then the exit status should be 0
@@ -69,3 +69,23 @@ Feature: the git-conform script
           | bar.png |
           | foo.rb  |
           | qux     |
+
+  Scenario: a bunch of FileCheckers
+
+     When I run `git-conform --available`
+     Then the exit status should be 0
+      And the output should not contain any of these:
+          | BaseChecker  |
+          | FalseChecker |
+          | FileChecker  |
+          | NoopChecker  |
+          | TrueChecker  |
+      And the output should contain all of these:
+          | CarriageReturnCharacterChecker |
+          | FileNotEmptyChecker            |
+          | LowercaseFilenameChecker       |
+          | NonAsciiCharacterChecker       |
+          | NonAsciiFilenameChecker        |
+          | TabCharacterChecker            |
+          | TrailingWhitespaceChecker      |
+          | WhitespaceFilenameChecker      |

@@ -30,8 +30,8 @@ Feature: Move Along, Nothing To See Here
     Then the exit status should be 0
      And the output should be empty
 
-  Scenario: NEED TO IMPLEMENT --available OPTION
+  Scenario: run the main script to output all available checkers
 
     When I run `git-conform --available`
     Then the exit status should be 0
-     And the output should be empty
+     And the output should not be empty

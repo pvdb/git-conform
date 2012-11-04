@@ -13,6 +13,18 @@ module Git
         true
       end
 
+      @@available_checkers = []
+
+      def self.inherited subclass
+        @@available_checkers << subclass
+      end
+
+      def self.available_checkers
+        @@available_checkers.map(&:name).map { |class_name|
+          class_name.match(/Git::Conform::(.*)Checker/)[1]
+        }
+      end
+
     end
   end
 end

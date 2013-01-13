@@ -44,7 +44,7 @@ unless repo
 end
 
 if options[:files]
-  unless (files = repo.files).empty?
+  unless (files = repo.files(:type => :binary)).empty?
     STDOUT.puts files.sort.join("\n")
   end
   exit 0
@@ -76,9 +76,9 @@ if options[:check]
   repo.conformity_checkers.each do |checker_class|
     checker_class = constantize "Git::Conform::#{checker_class}"
     puts checker_class.name.inverse
-    repo.files.each do |filename|
+    repo.files(:type => :text).each do |filename|
       checker_class.new(filename).check_conformity do |filename|
-        puts ">>> " + filename
+        puts filename
       end
     end
   end

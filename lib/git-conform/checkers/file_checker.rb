@@ -13,6 +13,10 @@ module Git
         true
       end
 
+      def content
+        File.open(@filename, "r") { |file| file.read }
+      end
+
       @@available_checkers = []
 
       def self.inherited subclass

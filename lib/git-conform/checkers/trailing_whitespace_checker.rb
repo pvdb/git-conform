@@ -3,7 +3,7 @@ module Git
     class TrailingWhitespaceChecker < FileChecker
 
       def conforms?
-        super && File.read(@filename).match(/[[:blank:]]$/).nil?
+        super && content.match(/[[:blank:]]$/).nil?
       end
 
     end

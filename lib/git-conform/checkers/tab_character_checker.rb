@@ -3,7 +3,7 @@ module Git
     class TabCharacterChecker < FileChecker
 
       def conforms?
-        super && !File.read(@filename).include?("\t")
+        super && !content.include?("\t")
       end
 
     end

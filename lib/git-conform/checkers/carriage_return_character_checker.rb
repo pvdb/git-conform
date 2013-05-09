@@ -3,7 +3,7 @@ module Git
     class CarriageReturnCharacterChecker < FileChecker
 
       def conforms?
-        super && !File.read(@filename).include?("\r")
+        super && !content.include?("\r")
       end
 
     end

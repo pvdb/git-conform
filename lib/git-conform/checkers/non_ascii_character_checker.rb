@@ -3,7 +3,7 @@ module Git
     class NonAsciiCharacterChecker < FileChecker
 
       def conforms?
-        super && File.read(@filename).ascii_only?
+        super && content.ascii_only?
       end
 
     end

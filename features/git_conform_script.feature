@@ -60,15 +60,18 @@ Feature: the git-conform script
   Scenario: a git repo with a list of files
 
     Given a git repo with file types:
-          | foo.rb  | text   |
-          | bar.png | binary |
-          | qux     | text   |
+          | foo.rb     | text   |
+          | bar.png    | binary |
+          | blegga.tar | binary |
+          | qux        | text   |
      When I run `git-conform --files` in the git repo
      Then the exit status should be 0
       And the output should contain all of these:
-          | bar.png |
-          | foo.rb  |
-          | qux     |
+          | foo.rb     |
+          | qux        |
+      And the output should not contain any of these:
+          | bar.png    |
+          | blegga.tar |
 
   Scenario: a bunch of FileCheckers
 

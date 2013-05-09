@@ -44,7 +44,7 @@ unless repo
 end
 
 if options[:files]
-  unless (files = repo.files(:type => :binary)).empty?
+  unless (files = repo.files(:type => :text)).empty?
     STDOUT.puts files.sort.join("\n")
   end
   exit 0

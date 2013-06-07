@@ -2,8 +2,59 @@ require 'spec_helper'
 
 describe Git::Conform::FileChecker do
 
+  include Aruba::Api
+
   it "subclasses Git::Conform::BaseChecker" do
     described_class.superclass.should be Git::Conform::BaseChecker
+  end
+
+  describe "#conforms?" do
+
+    context "file/directory doesn't exist" do
+      let(:filename) { "non-existent" }
+      let(:path) { File.join(current_dir, filename) }
+      subject { described_class.new(path) }
+
+      # file/directory doesn't exist
+      before { raise if File.exists? path }
+
+      it "raises a RuntimeError" do
+        expect {
+          subject.conforms?
+        }.to raise_error(RuntimeError, "No such file or directory - #{path}")
+      end
+    end
+
+    context "directory exists" do
+      let(:dirname) { "subdir" }
+      let(:path) { File.join(current_dir, dirname) }
+      subject { described_class.new(path) }
+
+      # directory exists
+      before { create_dir(dirname) }
+
+      it "raises a RuntimeError" do
+        expect {
+          subject.conforms?
+        }.to raise_error(RuntimeError, "Is a directory - #{path}")
+      end
+    end
+
+    context "file exists" do
+      let(:filename) { "existent.rb" }
+      let(:path) { File.join(current_dir, filename) }
+      subject { described_class.new(path) }
+
+      # file exists
+      before { write_file(filename, "") }
+
+      it "doesn't raise a RuntimeError" do
+        expect {
+          subject.conforms?.to be_true
+        }.to_not raise_error(RuntimeError)
+      end
+    end
+
   end
 
   describe ".available_checkers" do

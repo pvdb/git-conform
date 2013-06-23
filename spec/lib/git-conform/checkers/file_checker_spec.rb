@@ -58,6 +58,40 @@ describe Git::Conform::FileChecker do
 
   end
 
+  describe ".excluded?" do
+
+    specify { expect(described_class).to respond_to :excluded? }
+
+    it "returns false without any file exclusion patterns" do
+      # given
+      described_class.should_receive(:file_exclusion_patterns) { [] }
+      # when/then
+      expect(described_class.excluded? "foo_bar.txt").to be_false
+    end
+
+    it "returns false when filename doesn't match any file exclusion patterns" do
+      # given
+      described_class.should_receive(:file_exclusion_patterns) { ['*.png', '*.jpg', '*.gif'] }
+      # when/then
+      expect(described_class.excluded? "foo_bar.txt").to be_false
+    end
+
+    it "returns true when filename matches any file exclusion patterns glob-wise" do
+      # given
+      described_class.should_receive(:file_exclusion_patterns) { ['*.txt', '*.rb'] }
+      # when/then
+      expect(described_class.excluded? "foo_bar.txt").to be_true
+    end
+
+    it "returns true when filename matches any file exclusion patterns exactly" do
+      # given
+      described_class.should_receive(:file_exclusion_patterns) { ['foo_bar.txt', '*.rb'] }
+      # when/then
+      expect(described_class.excluded? "foo_bar.txt").to be_true
+    end
+
+  end
+
   describe "#conforms?" do
 
     context "file/directory doesn't exist" do

@@ -5,7 +5,15 @@ module Git
       @file_exclusion_patterns = []
 
       class << self
+
         attr_reader :file_exclusion_patterns
+
+        def excluded? filename
+          file_exclusion_patterns.any? { |pattern|
+            File.fnmatch?(pattern, filename)
+          }
+        end
+
       end
 
       def conforms?

@@ -2,6 +2,12 @@ module Git
   module Conform
     class FileChecker < BaseChecker
 
+      @file_exclusion_patterns = []
+
+      class << self
+        attr_reader :file_exclusion_patterns
+      end
+
       def conforms?
         if File.exists? @filename
           unless File.file? @filename
@@ -20,7 +26,12 @@ module Git
       @@available_checkers = []
 
       def self.inherited subclass
+        # keep track of all defined subclasses
+        # for the "--available" command option
         @@available_checkers << subclass
+        # ensure all file checkers "inherit" the @file_exclusion_patterns class instance variable
+        # http://stackoverflow.com/questions/10728735/inherit-class-level-instance-variables-in-ruby
+        subclass.instance_variable_set(:@file_exclusion_patterns, @file_exclusion_patterns.dup)
       end
 
       def self.available_checkers

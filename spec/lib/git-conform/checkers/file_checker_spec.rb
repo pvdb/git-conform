@@ -8,6 +8,56 @@ describe Git::Conform::FileChecker do
     described_class.superclass.should be Git::Conform::BaseChecker
   end
 
+  describe ".file_exclusion_patterns" do
+
+    specify { expect(described_class).to respond_to :file_exclusion_patterns }
+
+    it "doesn't exclude any files by default" do
+      expect(described_class.file_exclusion_patterns).to eq []
+    end
+
+  end
+
+  describe "@file_exclusion_patterns" do
+
+    after(:each) {
+      described_class.instance_variable_set(:@file_exclusion_patterns, [])
+    }
+
+    it "is used to store the file exclusion patterns" do
+      # given
+      patterns = [:foo, :bar]
+      # when
+      described_class.instance_variable_set(:@file_exclusion_patterns, patterns)
+      # then
+      expect(described_class.file_exclusion_patterns).to be patterns
+    end
+
+    it "is used as the default value for subclass file exclusion patterns" do
+      # given
+      patterns = [:foo, :bar]
+      described_class.instance_variable_set(:@file_exclusion_patterns, patterns)
+      # when
+      subclass = Class.new(described_class) ; Git::Conform.const_set('FirstRandomFileChecker', subclass)
+      # then
+      expect(subclass.file_exclusion_patterns).to_not be patterns
+      expect(subclass.file_exclusion_patterns).to match_array patterns
+    end
+
+    it "isn't changed when subclasses add additional file exclusion patterns" do
+      # given
+      patterns = [:foo, :bar]
+      described_class.instance_variable_set(:@file_exclusion_patterns, patterns)
+      # when
+      subclass = Class.new(described_class) ; Git::Conform.const_set('SecondRandomFileChecker', subclass)
+      subclass.class_eval "@file_exclusion_patterns << :blegga"
+      # then
+      expect(described_class.file_exclusion_patterns).to match_array [:foo, :bar]
+      expect(subclass.file_exclusion_patterns).to match_array [:foo, :bar, :blegga]
+    end
+
+  end
+
   describe "#conforms?" do
 
     context "file/directory doesn't exist" do

@@ -60,6 +60,8 @@ Given /^a git repo in directory "([^\042]*)"$/ do |repo_path|
   else
     Git::Conform::Repo.init_at(aruba_path, false)
   end
+  step %(I run `git config user.email "foo.bar@example.com"` in "#{repo_path}" directory)
+  step %(I run `git config user.name "Foo Bar"` in "#{repo_path}" directory)
 end
 
 When /^I run `([^\140]*)` in the git repo$/ do |cmd|

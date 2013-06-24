@@ -28,6 +28,18 @@ describe Git::Conform::BaseChecker do
 
   end
 
+  describe "#excluded?" do
+
+    subject { described_class.new("blegga.rb") }
+
+    it "raises a RuntimeError" do
+      expect {
+        subject.excluded?
+      }.to raise_error(RuntimeError, "SubclassResponsibility")
+    end
+
+  end
+
   describe "#check_conformity" do
 
     subject { described_class.new("blegga.rb") }

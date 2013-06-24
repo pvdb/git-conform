@@ -8,6 +8,10 @@ module Git
         @filename = filename
       end
 
+      def excluded?
+        raise "SubclassResponsibility"
+      end
+
       def conforms?
         raise "SubclassResponsibility"
       end

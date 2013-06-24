@@ -16,6 +16,10 @@ module Git
 
       end
 
+      def excluded?
+        self.class.excluded? @filename
+      end
+
       def conforms?
         if File.exists? @filename
           unless File.file? @filename

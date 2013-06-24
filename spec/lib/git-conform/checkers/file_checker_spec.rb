@@ -92,6 +92,30 @@ describe Git::Conform::FileChecker do
 
   end
 
+  describe "#excluded?" do
+
+    let(:filename) { "foo_bar.txt" }
+
+    subject { described_class.new(filename) }
+
+    specify { expect(subject).to respond_to :excluded? }
+
+    it "returns true if the class excludes the filename" do
+      # given
+      described_class.should_receive(:excluded?).with(filename) { true }
+      # when/then
+      expect(subject.excluded?).to be_true
+    end
+
+    it "returns false if the class doesn't exclude the filename" do
+      # given
+      described_class.should_receive(:excluded?).with(filename) { false }
+      # when/then
+      expect(subject.excluded?).to be_false
+    end
+
+  end
+
   describe "#conforms?" do
 
     context "file/directory doesn't exist" do

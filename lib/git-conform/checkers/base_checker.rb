@@ -17,7 +17,7 @@ module Git
       end
 
       def check_conformity &block
-        yield @filename unless conforms?
+        yield @filename unless excluded? || conforms?
       end
 
     end

@@ -44,18 +44,28 @@ describe Git::Conform::BaseChecker do
 
     subject { described_class.new("blegga.rb") }
 
-    it "yields with the filename if the file doesn't conform" do
-      subject.stub(:conforms?).and_return(false)
+    it "doesn't yield the block if the file is excluded" do
+      subject.stub(:excluded?).and_return(true)
+      subject.should_not_receive(:conforms?)
       expect { |block|
         subject.check_conformity &block
-      }.to yield_with_args("blegga.rb")
+      }.not_to yield_control
     end
 
-    it "doesn't yield the block if the file conforms" do
+    it "doesn't yield the block if the file isn't excluded but conforms" do
+      subject.stub(:excluded?).and_return(false)
       subject.stub(:conforms?).and_return(true)
       expect { |block|
         subject.check_conformity &block
       }.not_to yield_control
+    end
+
+    it "yields with the filename if the file isn't excluded and doesn't conform" do
+      subject.stub(:excluded?).and_return(false)
+      subject.stub(:conforms?).and_return(false)
+      expect { |block|
+        subject.check_conformity &block
+      }.to yield_with_args("blegga.rb")
     end
 
   end

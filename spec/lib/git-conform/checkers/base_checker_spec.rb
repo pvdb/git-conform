@@ -94,6 +94,29 @@ describe Git::Conform::BaseChecker do
 
   end
 
+  describe "#check_exclusion" do
+
+    before { write_file("blegga.rb", "") }
+    let(:path) { File.join(current_dir, "blegga.rb") }
+
+    subject { described_class.new(path) }
+
+    it "doesn't yield the block if the file isn't excluded" do
+      subject.stub(:excluded?).and_return(false)
+      expect { |block|
+        subject.check_exclusion &block
+      }.not_to yield_control
+    end
+
+    it "yields with the filename if the file is excluded" do
+      subject.stub(:excluded?).and_return(true)
+      expect { |block|
+        subject.check_exclusion &block
+      }.to yield_with_args(path)
+    end
+
+  end
+
   describe "#check_conformity" do
 
     before { write_file("blegga.rb", "") }

@@ -23,6 +23,10 @@ module Git
         raise "SubclassResponsibility"
       end
 
+      def check_exclusion &block
+        yield @filename if excluded?
+      end
+
       def check_conformity &block
         yield @filename unless excluded? || conforms?
       end

@@ -6,6 +6,13 @@ module Git
 
       def initialize filename
         @filename = filename
+        if File.exists? @filename
+          unless File.file? @filename
+            raise "Is a directory - #{@filename}"
+          end
+        else
+          raise "No such file or directory - #{@filename}"
+        end
       end
 
       def excluded?

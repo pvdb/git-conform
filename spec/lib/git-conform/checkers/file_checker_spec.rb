@@ -95,21 +95,23 @@ describe Git::Conform::FileChecker do
   describe "#excluded?" do
 
     let(:filename) { "foo_bar.txt" }
+    before { write_file(filename, "") }
+    let(:path) { File.join(current_dir, filename) }
 
-    subject { described_class.new(filename) }
+    subject { described_class.new(path) }
 
     specify { expect(subject).to respond_to :excluded? }
 
     it "returns true if the class excludes the filename" do
       # given
-      described_class.should_receive(:excluded?).with(filename) { true }
+      described_class.should_receive(:excluded?).with(path) { true }
       # when/then
       expect(subject.excluded?).to be_true
     end
 
     it "returns false if the class doesn't exclude the filename" do
       # given
-      described_class.should_receive(:excluded?).with(filename) { false }
+      described_class.should_receive(:excluded?).with(path) { false }
       # when/then
       expect(subject.excluded?).to be_false
     end
@@ -118,49 +120,16 @@ describe Git::Conform::FileChecker do
 
   describe "#conforms?" do
 
-    context "file/directory doesn't exist" do
-      let(:filename) { "non-existent" }
-      let(:path) { File.join(current_dir, filename) }
-      subject { described_class.new(path) }
+    let(:filename) { "foo_bar.txt" }
+    before { write_file(filename, "") }
+    let(:path) { File.join(current_dir, filename) }
 
-      # file/directory doesn't exist
-      before { raise if File.exists? path }
+    subject { described_class.new(path) }
 
-      it "raises a RuntimeError" do
-        expect {
-          subject.conforms?
-        }.to raise_error(RuntimeError, "No such file or directory - #{path}")
-      end
-    end
+    specify { expect(subject).to respond_to :conforms? }
 
-    context "directory exists" do
-      let(:dirname) { "subdir" }
-      let(:path) { File.join(current_dir, dirname) }
-      subject { described_class.new(path) }
-
-      # directory exists
-      before { create_dir(dirname) }
-
-      it "raises a RuntimeError" do
-        expect {
-          subject.conforms?
-        }.to raise_error(RuntimeError, "Is a directory - #{path}")
-      end
-    end
-
-    context "file exists" do
-      let(:filename) { "existent.rb" }
-      let(:path) { File.join(current_dir, filename) }
-      subject { described_class.new(path) }
-
-      # file exists
-      before { write_file(filename, "") }
-
-      it "doesn't raise a RuntimeError" do
-        expect {
-          subject.conforms?.to be_true
-        }.to_not raise_error(RuntimeError)
-      end
+    it "returns true unconditionally" do
+      expect(subject.conforms?).to be_true
     end
 
   end

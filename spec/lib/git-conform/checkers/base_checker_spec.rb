@@ -2,23 +2,74 @@ require 'spec_helper'
 
 describe Git::Conform::BaseChecker do
 
+  include Aruba::Api
+
   describe "#initialize" do
 
     context "with a filename" do
-      subject { described_class.new("blegga.rb") }
-      its(:filename) { should eq "blegga.rb" }
+      before { write_file("blegga.rb", "") }
+      let(:path) { File.join(current_dir, "blegga.rb") }
+      subject { described_class.new(path) }
+      its(:filename) { should eq path }
     end
 
     context "with a path" do
-      subject { described_class.new("foo/bar/blegga.rb") }
-      its(:filename) { should eq "foo/bar/blegga.rb" }
+      before { write_file("foo/bar/blegga.rb", "") }
+      let(:path) { File.join(current_dir, "foo/bar/blegga.rb") }
+      subject { described_class.new(path) }
+      its(:filename) { should eq path }
+    end
+
+    context "file/directory doesn't exist" do
+      let(:filename) { "non-existent" }
+      let(:path) { File.join(current_dir, filename) }
+
+      # file/directory doesn't exist
+      before { raise if File.exists? path }
+
+      it "raises a RuntimeError" do
+        expect {
+          described_class.new(path)
+        }.to raise_error(RuntimeError, "No such file or directory - #{path}")
+      end
+    end
+
+    context "directory exists" do
+      let(:dirname) { "subdir" }
+      let(:path) { File.join(current_dir, dirname) }
+
+      # directory exists
+      before { create_dir(dirname) }
+
+      it "raises a RuntimeError" do
+        expect {
+          described_class.new(path)
+        }.to raise_error(RuntimeError, "Is a directory - #{path}")
+      end
+    end
+
+    context "file exists" do
+      let(:filename) { "existent.rb" }
+      let(:path) { File.join(current_dir, filename) }
+
+      # file exists
+      before { write_file(filename, "") }
+
+      it "doesn't raise a RuntimeError" do
+        expect {
+          described_class.new(path)
+        }.to_not raise_error(RuntimeError)
+      end
     end
 
   end
 
   describe "#conforms?" do
 
-    subject { described_class.new("blegga.rb") }
+    before { write_file("blegga.rb", "") }
+    let(:path) { File.join(current_dir, "blegga.rb") }
+
+    subject { described_class.new(path) }
 
     it "raises a RuntimeError" do
       expect {
@@ -30,7 +81,10 @@ describe Git::Conform::BaseChecker do
 
   describe "#excluded?" do
 
-    subject { described_class.new("blegga.rb") }
+    before { write_file("blegga.rb", "") }
+    let(:path) { File.join(current_dir, "blegga.rb") }
+
+    subject { described_class.new(path) }
 
     it "raises a RuntimeError" do
       expect {
@@ -42,7 +96,10 @@ describe Git::Conform::BaseChecker do
 
   describe "#check_conformity" do
 
-    subject { described_class.new("blegga.rb") }
+    before { write_file("blegga.rb", "") }
+    let(:path) { File.join(current_dir, "blegga.rb") }
+
+    subject { described_class.new(path) }
 
     it "doesn't yield the block if the file is excluded" do
       subject.stub(:excluded?).and_return(true)
@@ -65,7 +122,7 @@ describe Git::Conform::BaseChecker do
       subject.stub(:conforms?).and_return(false)
       expect { |block|
         subject.check_conformity &block
-      }.to yield_with_args("blegga.rb")
+      }.to yield_with_args(path)
     end
 
   end

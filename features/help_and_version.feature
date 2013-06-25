@@ -8,6 +8,7 @@ Feature: Help Me I've Got Versionitis
      And the banner should include the version
      And the banner should document that this app takes options
      And the following options should be documented:
+         | --verbose, -V:   |
          | --available, -a: |
          | --check, -c:     |
          | --files, -f:     |

@@ -19,6 +19,7 @@ options = Trollop::options do
   opt :list,      'List all conformity checkers for this repo',            :short => 'l', :default => false
   opt :verify,    'Verify that all conformity checkers exist',             :short => 'e', :default => false
   opt :check,     'Run all conformity checkers',                           :short => 'c', :default => false
+  opt :verbose,   'Run the conformity checkers verbosely',                 :short => 'V', :default => false
 
 end
 

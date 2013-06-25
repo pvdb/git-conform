@@ -22,3 +22,11 @@ Then /^the output should not contain any of these:$/ do |table|
     assert_no_partial_output(string, all_output)
   end
 end
+
+Then /^the following Trollop-style options should be documented:$/ do |options|
+  # https://github.com/davetron5000/methadone/issues/37
+  options.raw.flatten.each do |option|
+    step %(the output should match /\\s*#{Regexp.escape(option)}[\\s\\W]+\\w[\\s\\w][\\s\\w]+/)
+  end
+end
+

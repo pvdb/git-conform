@@ -78,8 +78,13 @@ if options[:check]
     checker_class = constantize "Git::Conform::#{checker_class}"
     puts checker_class.name.inverse
     repo.files(:type => :text).each do |filename|
-      checker_class.new(filename).check_conformity do |filename|
-        puts filename
+      file_checker = checker_class.new(filename)
+      if file_checker.excluded?
+        puts "EXCLUDE: " + filename.color(:blue) if options[:verbose]
+      elsif file_checker.conforms?
+        puts "INCLUDE: " + filename.color(:green) if options[:very_verbose]
+      else
+        puts "VIOLATE: " + filename.color(:red)
       end
     end
   end

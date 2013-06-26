@@ -3,3 +3,7 @@
 	checker = NonAsciiCharacterChecker
 	checker = TabCharacterChecker
 	checker = TrailingWhitespaceChecker
+	checker = FileNotEmptyChecker
+	checker = LowercaseFilenameChecker
+	checker = NonAsciiFilenameChecker
+	checker = WhitespaceFilenameChecker

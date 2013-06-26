@@ -31,6 +31,13 @@ class Git::Conform::Repo < Rugged::Repository
     end
   end
 
+  def exclusion_patterns
+    @exclusion_patterns ||= begin
+      # TODO make this work via Rugged (why doesn't `Rugged::Config.new()` work?!?)
+      `git config -f #{git_conform_path} --get-all git.conform.exclusion`.chomp.split($/)
+    end
+  end
+
   def verify
     conformity_checkers.each do |checker|
       constantize "Git::Conform::#{checker}"

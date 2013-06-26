@@ -163,6 +163,10 @@ Then /^no conformity checkers apply to the git repo$/ do
   @repo.conformity_checkers.should be_empty
 end
 
+Then /^no exclusion patterns apply to the git repo$/ do
+  @repo.exclusion_patterns.should be_empty
+end
+
 Then /^the following conformity checkers apply to the git repo:$/ do |table|
   @repo.conformity_checkers.should =~ table.raw.flatten
 end
@@ -173,6 +177,10 @@ end
 
 Then /^at least one conformity checker is invalid$/ do
   expect { @repo.verify }.to raise_error(NameError)
+end
+
+Then /^there are "([^\042]*)" exclusion patterns$/ do |number_of_exclusion_patterns|
+  expect(@repo.exclusion_patterns.size).to be number_of_exclusion_patterns.to_i
 end
 
 #

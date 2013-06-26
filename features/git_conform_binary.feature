@@ -38,7 +38,8 @@ Feature: the Git::Conform binary algorithm
       And a git config file named ".gitconform" with:
           """
           [git "conform"]
-              binary = *.rb:*.java
+              binary = *.rb
+              binary = *.java
           """
      Then git conform checks "5" files for conformity
       And the following are considered "binary" files:

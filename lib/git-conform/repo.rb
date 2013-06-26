@@ -24,10 +24,10 @@ class Git::Conform::Repo < Rugged::Repository
     end
   end
 
-  def binary_glob_patterns
-    @binary_glob_patterns ||= begin
+  def binary_patterns
+    @binary_patterns ||= begin
       # TODO make this work via Rugged (why doesn't `Rugged::Config.new()` work?!?)
-      `git config -f #{git_conform_path} git.conform.binary`.chomp.split(':')
+      `git config -f #{git_conform_path} --get-all git.conform.binary`.chomp.split($/)
     end
   end
 
@@ -65,7 +65,7 @@ class Git::Conform::Repo < Rugged::Repository
   # TODO is this the most performant way? (see also: "man 5 gitattributes" for inspiration)
 
   def binary? entry
-    binary_glob_patterns.any? { |glob_pattern|
+    binary_patterns.any? { |glob_pattern|
       File.fnmatch?(glob_pattern, entry[:name])
     } || !@repo.lookup(entry[:oid]).read_raw.data.match(/\x00/).nil?
   end

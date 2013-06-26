@@ -20,7 +20,7 @@ class Git::Conform::Repo < Rugged::Repository
   def conformity_checkers
     @conformity_checkers ||= begin
       # TODO make this work via Rugged (why doesn't `Rugged::Config.new()` work?!?)
-      `git config -f #{git_conform_path} git.conform.checkers`.chomp.split(':')
+      `git config -f #{git_conform_path} --get-all git.conform.checker`.chomp.split($/)
     end
   end
 

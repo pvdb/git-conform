@@ -49,7 +49,7 @@ class Git::Conform::Repo < Rugged::Repository
     @files ||= {}
     @files[type] ||= begin
       files = []
-      repo.lookup(self.head.target).tree.walk_blobs { |root, entry|
+      repo.lookup(self.head.target.oid).tree.walk_blobs { |root, entry|
         entry_path = (root.empty? ? entry[:name] : File.join(root, entry[:name]))
         files << entry_path if binary?(entry) ? (type != :text) : (type != :binary)
       }

@@ -29,7 +29,7 @@ if options[:available]
 end
 
 repo = begin
-  Git::Conform::Repo.new(Git::Conform::Repo.discover(Dir.pwd))
+  Git::Conform::Repo.new(Git::Conform::Repo.discover(Dir.pwd).path)
 rescue RuntimeError
   unless $!.message =~ /The given path is not a valid Git repository/
     unless $!.message =~ /Not a git repository \(or any of the parent directories\)/

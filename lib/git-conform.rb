@@ -2,7 +2,7 @@ require 'rubygems'
 
 require 'rugged'
 require 'trollop'
-require 'rainbow'
+require 'rainbow/ext/string'
 
 require 'git-conform/version'
 require 'git-conform/banner'

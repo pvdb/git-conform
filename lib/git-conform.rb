@@ -19,6 +19,6 @@ Dir.glob(File.join(File.dirname(__FILE__), 'git-conform', 'checkers', '*_checker
 
 module Git
   module Conform
-    # Your code goes here...
+    DEFAULT_PATH = File.expand_path('../.gitconform', __dir__)
   end
 end

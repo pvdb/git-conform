@@ -10,7 +10,8 @@ class Git::Conform::Repo < Rugged::Repository
   end
 
   def git_conform_path
-    File.join(workdir, ".gitconform")
+    repo_path = File.join(workdir, ".gitconform")
+    File.exist?(repo_path) ? repo_path : Git::Conform::DEFAULT_PATH
   end
 
   def git_conform_enabled?

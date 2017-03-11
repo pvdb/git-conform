@@ -12,6 +12,7 @@ module Git
 
       @file_exclusion_patterns << '*README*'
       @file_exclusion_patterns << '*LICENSE*'
+      @file_exclusion_patterns << '*CODE_OF_CONDUCT*'
 
       def conforms?
         super && @filename.match(/[A-Z]/).nil?

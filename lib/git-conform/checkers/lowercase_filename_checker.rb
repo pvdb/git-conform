@@ -2,6 +2,7 @@ module Git
   module Conform
     class LowercaseFilenameChecker < FileChecker
 
+      @file_exclusion_patterns << '*Makefile*'
       @file_exclusion_patterns << '*Brewfile*'
       @file_exclusion_patterns << '*Rakefile*'
       @file_exclusion_patterns << '*Gemfile*'

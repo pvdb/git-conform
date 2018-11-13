@@ -1,30 +1,33 @@
-require "bundler/gem_tasks"
+# rubocop:disable Style/SymbolArray
+# rubocop:disable Style/HashSyntax
 
-require 'cucumber'
-require 'cucumber/rake/task'
+require 'bundler/gem_tasks'
 
-require 'rspec'
-require 'rspec/core/rake_task'
-
-task :gemspec do
-  @gemspec ||= eval(File.read(Dir["*.gemspec"].first))
+task :validate_gemspec do
+  Bundler.load_gemspec('git-conform.gemspec').validate
 end
 
-desc "Validate the gemspec"
-task :validate => :gemspec do
-  @gemspec.validate
+task :version => :validate_gemspec do
+  puts Git::Conform::VERSION
 end
 
-RSpec::Core::RakeTask.new(:spec) do |t|
-  t.rspec_opts = "--format d --color"
-end
-task :rspec => [:spec]
+require 'rubocop/rake_task'
 
-Cucumber::Rake::Task.new(:features) do |t|
-  t.cucumber_opts = "features --format pretty --tags ~@wip"
-end
-task :cucumber => [:features]
+RuboCop::RakeTask.new(:rubocop)
 
-# the principle of least surprise...
-task :default => [:test]
-task :test => [:spec, :features]
+require 'rake/testtask'
+
+Rake::TestTask.new(:test) do |t|
+  t.libs << 'test'
+  t.libs << 'lib'
+  t.test_files = FileList['test/**/*_test.rb']
+end
+
+task :default => [:rubocop, :test]
+
+task :documentation
+
+Rake::Task['build'].enhance([:default, :documentation])
+
+# rubocop:enable Style/HashSyntax
+# rubocop:enable Style/SymbolArray

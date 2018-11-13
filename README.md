@@ -1,7 +1,5 @@
 # Git::Conform
 
-[![Build Status](https://secure.travis-ci.org/pvdb/git-conform.png)](http://travis-ci.org/pvdb/git-conform)
-
 Conformity checking for git repositories
 
 ## Installation

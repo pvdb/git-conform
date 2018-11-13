@@ -1,25 +1,43 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+lib = File.expand_path('../lib', __dir__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'git/conform'
 
-begin
-  require 'git-conform'
-rescue LoadError
-  require 'rubygems'
-  require 'git-conform'
-end
+require 'slop'
 
-options = Trollop::options do
+options = Slop.parse(help: true) do |o|
 
-  version Git::Conform::COPYRIGHT
-  banner Git::Conform::BANNER
+  o.banner = <<-"BANNER"
+    Usage: git-conform [options]
 
-  opt :available, 'List all available conformity checkers',                :short => 'a', :default => false
-  opt :files,     'List all files in the git repo that will be processed', :short => 'f', :default => false
-  opt :list,      'List all conformity checkers for this repo',            :short => 'l', :default => false
-  opt :verify,    'Verify that all conformity checkers exist',             :short => 'e', :default => false
-  opt :check,     'Run all conformity checkers',                           :short => 'c', :default => false
-  opt :verbose,   'Run the conformity checkers verbosely',                 :short => 'V', :default => false
+    v#{Git::Conform::VERSION}
+
+    Options:
+  BANNER
+
+  o.on '--version', 'Print the version' do
+    dependencies = [
+      "rugged v#{Rugged::VERSION}",
+      "#{RUBY_ENGINE} #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}",
+    ].join(', ')
+
+    puts "#{Git::Conform::NAME} v#{Git::Conform::VERSION} (#{dependencies})"
+    exit(0)
+  end
+
+  o.on '--help', 'Print help message' do
+    puts o
+    exit(0)
+  end
+
+  o.on '--available', 'List all available conformity checkers'
+  o.on '--files',     'List all files in the git repo that will be processed'
+  o.on '--list',      'List all conformity checkers for this repo'
+  o.on '--verify',    'Verify that all conformity checkers exist'
+  o.on '--check',     'Run all conformity checkers'
+  o.on '--verbose',   'Make the conformity checkers verbose'
+  o.on '--gabby',     'Make the conformity checkers gabby'
 
 end
 
@@ -76,15 +94,15 @@ end
 if options[:check]
   repo.conformity_checkers.each do |checker_class|
     checker_class = constantize "Git::Conform::#{checker_class}"
-    puts checker_class.name.inverse
+    puts checker_class.name.invert
     repo.files(:type => :text).each do |filename|
       file_checker = checker_class.new(filename)
       if file_checker.excluded?
-        puts "EXCLUDE: " + filename.color(:blue) if options[:verbose]
+        puts "EXCLUDE: " + filename.blue if options[:verbose]
       elsif file_checker.conforms?
-        puts "INCLUDE: " + filename.color(:green) if options[:very_verbose]
+        puts "INCLUDE: " + filename.green if options[:gabby]
       else
-        puts "VIOLATE: " + filename.color(:red)
+        puts "VIOLATE: " + filename.red
       end
     end
   end

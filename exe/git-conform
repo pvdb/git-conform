@@ -43,72 +43,70 @@ end
 
 if options[:available]
   STDOUT.puts Git::Conform::FileChecker.available_checkers
-  exit 0
+  exit(0)
 end
 
 repo = begin
-  Git::Conform::Repo.new(Git::Conform::Repo.discover(Dir.pwd).path)
-rescue RuntimeError
-  unless $!.message =~ /The given path is not a valid Git repository/
-    unless $!.message =~ /Not a git repository \(or any of the parent directories\)/
-      raise # Rugged uses generic RuntimeErrors, so we have to check the exception messages...
-    end
-  end
-  nil
-end
+         Git::Conform::Repo.new(Git::Conform::Repo.discover(Dir.pwd).path)
+       rescue RuntimeError
+         unless $ERROR_INFO.message =~ /The given path is not a valid Git repository/
+           unless $ERROR_INFO.message =~ /Not a git repository \(or any of the parent directories\)/
+             raise # Rugged uses generic RuntimeErrors, so we have to check the exception messages...
+           end
+         end
+         nil
+       end
 
 unless repo
   STDERR.puts "fatal: Not a git repository (or any of the parent directories): #{Dir.pwd}"
-  exit -1
+  exit(-1)
 end
 
 if options[:files]
-  unless (files = repo.files(:type => :text)).empty?
+  unless (files = repo.files(type: :text)).empty?
     STDOUT.puts files.sort.join("\n")
   end
-  exit 0
+  exit(0)
 end
 
 unless repo.git_conform_enabled?
   STDERR.puts "fatal: unable to read config file '#{repo.git_conform_path}': No such file or directory"
-  exit -1
+  exit(-1)
 end
 
 if options[:list]
   unless (checkers = repo.conformity_checkers).empty?
     STDOUT.puts checkers.sort.join("\n")
   end
-  exit 0
+  exit(0)
 end
 
 if options[:verify]
   begin
     repo.verify
   rescue NameError
-    STDERR.puts "fatal: #{$!.message}"
-    exit -1
+    STDERR.puts "fatal: #{$ERROR_INFO.message}"
+    exit(-1)
   end
-  exit 0
+  exit(0)
 end
 
 if options[:check]
   repo.conformity_checkers.each do |checker_class|
     checker_class = constantize "Git::Conform::#{checker_class}"
     puts checker_class.name.invert
-    repo.files(:type => :text).each do |filename|
+    repo.files(type: :text).each do |filename|
       file_checker = checker_class.new(filename)
       if file_checker.excluded?
-        puts "EXCLUDE: " + filename.blue if options[:verbose]
+        puts 'EXCLUDE: ' + filename.blue if options[:verbose]
       elsif file_checker.conforms?
-        puts "INCLUDE: " + filename.green if options[:gabby]
+        puts 'INCLUDE: ' + filename.green if options[:gabby]
       else
-        puts "VIOLATE: " + filename.red
+        puts 'VIOLATE: ' + filename.red
       end
     end
   end
-  exit 0
+  exit(0)
 end
-
-fail "Coming soon!"
 
 # That's all, Folks!

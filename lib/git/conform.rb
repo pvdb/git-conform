@@ -1,4 +1,5 @@
 require 'rugged'
+require 'English'
 
 require 'ext/string'
 require 'ext/inflections'

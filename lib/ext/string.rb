@@ -1,5 +1,3 @@
-# rubocop:disable Layout/EmptyLineBetweenDefs
-
 class String
 
   def colorize(color_code) "\e[#{color_code}m#{self}\e[0m"; end
@@ -14,5 +12,3 @@ class String
   def undent() gsub(/^.{#{slice(/^ +/).length}}/, ''); end
 
 end
-
-# rubocop:enable Layout/EmptyLineBetweenDefs

@@ -8,7 +8,7 @@ task :validate_gemspec do
 end
 
 task :version => :validate_gemspec do
-  puts Git::Conform::VERSION
+  puts Git::Conform.version
 end
 
 require 'rubocop/rake_task'

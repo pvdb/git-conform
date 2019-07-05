@@ -57,10 +57,7 @@ repo = begin
          nil
        end
 
-unless repo
-  STDERR.puts "fatal: Not a git repository (or any of the parent directories): #{Dir.pwd}"
-  exit(-1)
-end
+repo || abort("fatal: Not a git repository (or any of the parent directories): #{Dir.pwd}")
 
 if options[:files]
   unless (files = repo.files(type: :text)).empty?
@@ -69,10 +66,7 @@ if options[:files]
   exit(0)
 end
 
-unless repo.git_conform_enabled?
-  STDERR.puts "fatal: unable to read config file '#{repo.git_conform_path}': No such file or directory"
-  exit(-1)
-end
+repo.git_conform_enabled? || abort("fatal: unable to read config file '#{repo.git_conform_path}': No such file or directory")
 
 if options[:list]
   unless (checkers = repo.conformity_checkers).empty?
@@ -85,8 +79,7 @@ if options[:verify]
   begin
     repo.verify
   rescue NameError
-    STDERR.puts "fatal: #{$ERROR_INFO.message}"
-    exit(-1)
+    abort "fatal: #{$ERROR_INFO.message}"
   end
   exit(0)
 end

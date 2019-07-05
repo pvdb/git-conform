@@ -23,7 +23,7 @@ Rake::TestTask.new(:test) do |t|
   t.test_files = FileList['test/**/*_test.rb']
 end
 
-task :default => [:rubocop, :test]
+task :default => [:version, :rubocop, :test]
 
 task :documentation
 
